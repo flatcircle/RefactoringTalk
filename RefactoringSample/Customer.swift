@@ -13,6 +13,15 @@ struct Customer {
         rentals.append(rental)
     }
 
+    fileprivate func getFrequentRentalPoints(_ each: Rental) -> Int {
+
+        var frequentRentalPoints = 1
+        if each.movie.priceCode == Movie.newRelease && each.daysRented > 1 {
+            frequentRentalPoints += 1
+        }
+        return frequentRentalPoints
+    }
+
     func statement() -> String {
         var totalAmount = 0.0
         var frequentRentalPoints = 0
@@ -20,40 +29,15 @@ struct Customer {
         var result = "Rental for \(name)\n"
 
         for each in rentals {
-            let amount = amountFor(each)
 
-            frequentRentalPoints += 1
-            if each.movie.priceCode == Movie.newRelease && each.daysRented > 1 {
-                frequentRentalPoints += 1
-            }
+            frequentRentalPoints += getFrequentRentalPoints(each)
 
-            totalAmount += amount
+            totalAmount += each.charge()
         }
 
         result += "Amount owed is \(totalAmount)\n"
         result += "You earned \(frequentRentalPoints) frequent renter points"
 
-        return result
-    }
-
-    fileprivate func amountFor(_ rental: Rental) -> Double {
-        var result = 0.0
-        switch rental.movie.priceCode {
-        case Movie.regular:
-            result += 2
-            if rental.daysRented > 2 {
-                result += Double((rental.daysRented - 2)) * 1.5
-            }
-        case Movie.newRelease:
-            result += Double(rental.daysRented * 3)
-        case Movie.children:
-            result += 1.5
-            if rental.daysRented > 3 {
-                result += Double((rental.daysRented - 3)) * 1.5
-            }
-        default:
-            break
-        }
         return result
     }
 }
