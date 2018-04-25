@@ -33,4 +33,14 @@ struct Rental {
         }
         return result
     }
+
+
+    func getFrequentRentalPoints() -> Int {
+
+        var frequentRentalPoints = 1
+        if movie.priceCode == Movie.newRelease && daysRented > 1 {
+            frequentRentalPoints += 1
+        }
+        return frequentRentalPoints
+    }
 }
