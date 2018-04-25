@@ -19,27 +19,11 @@ struct Customer {
 
         var result = "Rental for \(name)\n"
 
-        for rental in rentals {
-            var amount = 0.0
-            switch rental.movie.priceCode {
-            case Movie.regular:
-                amount += 2
-                if rental.daysRented > 2 {
-                    amount += Double((rental.daysRented - 2)) * 1.5
-                }
-            case Movie.newRelease:
-                amount += Double(rental.daysRented * 3)
-            case Movie.children:
-                amount += 1.5
-                if rental.daysRented > 3 {
-                    amount += Double((rental.daysRented - 3)) * 1.5
-                }
-            default:
-                break
-            }
+        for each in rentals {
+            let amount = amountFor(each)
 
             frequentRentalPoints += 1
-            if rental.movie.priceCode == Movie.newRelease && rental.daysRented > 1 {
+            if each.movie.priceCode == Movie.newRelease && each.daysRented > 1 {
                 frequentRentalPoints += 1
             }
 
@@ -50,6 +34,27 @@ struct Customer {
         result += "You earned \(frequentRentalPoints) frequent renter points"
 
         return result
+    }
+
+    fileprivate func amountFor(_ each: Rental) -> Double {
+        var amount = 0.0
+        switch each.movie.priceCode {
+        case Movie.regular:
+            amount += 2
+            if each.daysRented > 2 {
+                amount += Double((each.daysRented - 2)) * 1.5
+            }
+        case Movie.newRelease:
+            amount += Double(each.daysRented * 3)
+        case Movie.children:
+            amount += 1.5
+            if each.daysRented > 3 {
+                amount += Double((each.daysRented - 3)) * 1.5
+            }
+        default:
+            break
+        }
+        return amount
     }
 }
 
