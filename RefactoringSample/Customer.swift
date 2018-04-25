@@ -36,25 +36,25 @@ struct Customer {
         return result
     }
 
-    fileprivate func amountFor(_ each: Rental) -> Double {
-        var amount = 0.0
-        switch each.movie.priceCode {
+    fileprivate func amountFor(_ rental: Rental) -> Double {
+        var result = 0.0
+        switch rental.movie.priceCode {
         case Movie.regular:
-            amount += 2
-            if each.daysRented > 2 {
-                amount += Double((each.daysRented - 2)) * 1.5
+            result += 2
+            if rental.daysRented > 2 {
+                result += Double((rental.daysRented - 2)) * 1.5
             }
         case Movie.newRelease:
-            amount += Double(each.daysRented * 3)
+            result += Double(rental.daysRented * 3)
         case Movie.children:
-            amount += 1.5
-            if each.daysRented > 3 {
-                amount += Double((each.daysRented - 3)) * 1.5
+            result += 1.5
+            if rental.daysRented > 3 {
+                result += Double((rental.daysRented - 3)) * 1.5
             }
         default:
             break
         }
-        return amount
+        return result
     }
 }
 
